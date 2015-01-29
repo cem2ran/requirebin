@@ -26,7 +26,7 @@ function initialize() {
   var codeMD5, sandbox
   var packagejson = {"name": "requirebin-sketch", "version": "1.0.0"}
   window.packagejson = packagejson
-  
+
   var loggedIn = false
   if (cookie.get('oauth-token')) loggedIn = true
 
@@ -40,7 +40,7 @@ function initialize() {
   }
 
   if (parsedURL.query.code) return authenticate()
-  
+
   var currentHost = parsedURL.protocol + '//' + parsedURL.hostname
   if (parsedURL.port) currentHost += ':' + parsedURL.port
 
@@ -71,7 +71,7 @@ function initialize() {
 
     return true
   }
-  
+
   function saveGist(id, opts) {
     if (loadingClass) loadingClass.remove('hidden')
     var entry = editor.editor.getValue()
@@ -81,7 +81,7 @@ function initialize() {
     sandbox.bundle(entry, packagejson.dependencies)
     sandbox.on('bundleEnd', function(bundle) {
       var minified = uglify.minify(bundle.script, {fromString: true, mangle: false, compress: false})
-      
+
       var gist = {
        "description": "requirebin sketch",
          "public": opts.isPublic,
@@ -170,9 +170,9 @@ function initialize() {
     var sandboxOpts = {
       cdn: config.BROWSERIFYCDN,
       container: outputEl,
-      iframeStyle: "body, html { height: 100%; width: 100%; }"
+      iframeStyle: "body, html { height: 100%; width: 100%; overflow-y: scroll; }"
     }
-    
+
     if (parsedURL.query.save) {
       // use memdown here to avoid indexeddb transaction bugs :(
       sandboxOpts.cacheOpts = { inMemory: true }
@@ -183,7 +183,7 @@ function initialize() {
     } else {
       sandbox = createSandbox(sandboxOpts)
     }
-    
+
     sandbox.on('modules', function(modules) {
       if (!modules) return
       packagejson.dependencies = {}
@@ -192,14 +192,14 @@ function initialize() {
         packagejson.dependencies[mod.name] = mod.version
       })
     })
-    
+
     if (parsedURL.query.save) return
-    
+
     var howTo = document.querySelector('#howto')
     var share = document.querySelector('#share')
     var controlsContainer = document.querySelector('#controls')
     var textBox = document.querySelector("#shareTextarea")
-    
+
     document.querySelector('.hide-howto').addEventListener('click', function() {
       elementClass(howTo).add('hidden')
     })
@@ -230,7 +230,7 @@ function initialize() {
         }, 0)
       }
     })
-    
+
     $('.run-btn').click(function(e) {
       e.preventDefault()
       $('a[data-action="play"]').click()
@@ -246,15 +246,15 @@ function initialize() {
     var actions = {
       play: function(pressed) {
         cacheStateMessage.add('hidden')
-        
-        var code = editor.editor.getValue()
+
+        var code = to5.transform(editor.editor.getValue()).code
         if (codeMD5 && codeMD5 === md5(code)) {
           loadingClass.add('hidden')
           sandbox.iframe.setHTML('<script type="text/javascript" src="embed-bundle.js"></script>')
         } else {
           sandbox.bundle(code, packagejson.dependencies)
         }
-        
+
         editor.once('change', function (e) {
           cacheStateMessage.remove('hidden')
         })
@@ -323,10 +323,10 @@ function initialize() {
         localStorage.setItem('code', code)
       })
     }
-    
+
     keydown(['<meta>', '<enter>']).on('pressed', actions.play)
     keydown(['<control>', '<enter>']).on('pressed', actions.play)
-    
+
     // loads the current code on load
     setTimeout(function() {
       actions.play()
