@@ -1,5 +1,5 @@
 module.exports = {
-    GITHUB_CLIENT: '77ca0223691ae7245419',
-    GATEKEEPER: 'http://localhost:9999',
-    BROWSERIFYCDN: 'http://wzrd.in'
+    GITHUB_CLIENT: '77f2992b68fc4f9d04f3',
+    GATEKEEPER: 'https://ce.ms/gatekeeper',
+    BROWSERIFYCDN: 'http://browserify.ce.ms'
 }
