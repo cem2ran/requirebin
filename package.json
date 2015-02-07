@@ -5,7 +5,8 @@
   "scripts": {
     "start": "beefy embed.js:embed-bundle.js index.js:bundle.js 8080",
     "build": "browserify embed.js -o embed-bundle.js && browserify index.js -o bundle.js --debug",
-    "minify": "cat bundle.js | uglifyjs -o bundle.js"
+    "minify": "cat bundle.js | uglifyjs -o bundle.js",
+    "postinstall": "npm run build && npm run minify"
   },
   "repository": {
     "type": "git",
