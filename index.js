@@ -43,6 +43,7 @@ function initialize() {
 
   var currentHost = parsedURL.protocol + '//' + parsedURL.hostname
   if (parsedURL.port) currentHost += ':' + parsedURL.port
+  currentHost += parsedURL.path;
 
   var loadingClass = elementClass(document.querySelector('.spinner'))
   var runButton = elementClass(document.querySelector('.play-button'))
